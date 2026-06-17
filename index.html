@@ -1,15 +1,238 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Redirecting...</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haarlem Games</title>
 
-<meta http-equiv="refresh" content="0; url=https://www.haarlemgames.com">
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: #fff;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-<link rel="canonical" href="https://www.haarlemgames.com">
+.container {
+  text-align: center;
+  width: 360px;
+  padding: 20px;
+}
+
+.logo { font-size: 46px; }
+h1 { color: #3D7A57; margin: 10px 0; }
+.tagline { color: #666; margin-bottom: 28px; }
+
+.message {
+  color: #3D7A57;
+  font-weight: bold;
+  min-height: 28px;
+}
+
+.progress {
+  width: 100%;
+  height: 30px;
+  border: 3px solid #3D7A57;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #eee;
+  margin-top: 18px;
+}
+
+.bar {
+  width: 0%;
+  height: 100%;
+  background: #F5C542;
+  transition: width 0.2s linear;
+}
+
+.percent {
+  margin-top: 14px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #3D7A57;
+}
+
+.warning {
+  color: #d12b2b;
+  font-weight: bold;
+  margin-top: 18px;
+  min-height: 26px;
+}
+
+.bike, .duck, .windmill {
+  position: fixed;
+  font-size: 42px;
+  pointer-events: none;
+}
+
+.bike {
+  bottom: 22px;
+  left: -80px;
+  animation: bikeMove 2.2s linear 1.4s forwards;
+}
+
+.duck {
+  top: 90px;
+  right: -80px;
+  animation: duckMove 2.2s linear 1.7s forwards;
+}
+
+.windmill {
+  top: 28px;
+  left: 28px;
+  opacity: 0;
+  animation: windmillShow 1.6s linear 1.9s forwards;
+}
+
+@keyframes bikeMove {
+  to { transform: translateX(120vw); }
+}
+
+@keyframes duckMove {
+  to { transform: translateX(-120vw); }
+}
+
+@keyframes windmillShow {
+  0% { opacity: 0; transform: rotate(0deg); }
+  20% { opacity: 1; }
+  100% { opacity: 1; transform: rotate(720deg); }
+}
+
+.poof {
+  animation: poof 0.55s ease-out forwards;
+}
+
+@keyframes poof {
+  to {
+    transform: scale(8) rotate(720deg);
+    opacity: 0;
+    filter: blur(18px);
+  }
+}
+
+.final-screen {
+  position: fixed;
+  inset: 0;
+  background: #F5C542;
+  color: #3D7A57;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-weight: bold;
+  font-size: 38px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  text-align: center;
+}
+
+.final-screen.show { opacity: 1; }
+</style>
 </head>
 
 <body>
-Redirecting to Haarlem Games...
+
+<div class="bike">🚲</div>
+<div class="duck">🦆</div>
+<div class="windmill">🌪️</div>
+
+<div class="container" id="container">
+  <div class="logo">🎮🌷</div>
+  <h1>Haarlem Games</h1>
+  <div class="tagline">Crafting Games with the Heart of Haarlem</div>
+
+  <div class="message" id="message">Loading...</div>
+
+  <div class="progress">
+    <div class="bar" id="bar"></div>
+  </div>
+
+  <div class="percent" id="percent">0%</div>
+  <div class="warning" id="warning"></div>
+</div>
+
+<div class="final-screen" id="final">
+  🚲🌷🎮
+  <div style="font-size:18px;margin-top:18px;">
+    TOO MUCH HAARLEM DETECTED
+  </div>
+</div>
+
+<script>
+const messages = [
+  "Eating some stroopwafels...",
+  "Dropjes are running low...",
+  "Biking back home now...",
+  "Waiting for the train at Haarlem Station...",
+  "Dodging cyclists...",
+  "Getting caught in a Dutch rain shower...",
+  "Quick stop at the Grote Markt...",
+  "Windmill maintenance in progress...",
+  "Searching for the perfect bitterbal...",
+  "Drinking some Hertog Jan...",
+  "Sailing through Haarlem canals...",
+  "Loading gezelligheid...",
+  "Watching the sunset over the Spaarne...",
+  "Crossing the Gravestenenbrug...",
+  "Taking a shortcut through Haarlem...",
+  "Looking for a parking spot that doesn't exist...",
+  "Refueling with coffee...",
+  "Petting the office cat...",
+  "Testing the next game...",
+  "Crafting games with the Heart of Haarlem..."
+];
+
+const funnyPercentages = [
+  "5%", "17%", "42%", "69%", "100%",
+  "1337%", "9001%", "42069%",
+  "999999%", "1000000000000%", "∞%"
+];
+
+let step = 0;
+
+const interval = setInterval(() => {
+  document.getElementById("message").innerText =
+    messages[Math.floor(Math.random() * messages.length)];
+
+  document.getElementById("percent").innerText = funnyPercentages[step];
+
+  document.getElementById("bar").style.width =
+    Math.min((step + 1) * 12, 100) + "%";
+
+  if (step === 5) {
+    document.getElementById("warning").innerText =
+      "⚠ TOO MUCH GEZELLIGHEID DETECTED";
+  }
+
+  step++;
+
+  if (step >= funnyPercentages.length) {
+    clearInterval(interval);
+
+    document.getElementById("warning").innerText =
+      "💥 ACCIDENTALLY EXCEEDED 100%";
+
+    setTimeout(() => {
+      document.getElementById("container").classList.add("poof");
+    }, 200);
+
+    setTimeout(() => {
+      document.body.style.background = "#F5C542";
+      document.getElementById("final").classList.add("show");
+    }, 700);
+
+    setTimeout(() => {
+      window.location.href = "https://www.haarlemgames.com";
+    }, 1400);
+  }
+}, 220);
+</script>
+
 </body>
 </html>
